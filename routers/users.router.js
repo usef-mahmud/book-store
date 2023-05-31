@@ -1,7 +1,9 @@
 const express = require('express')
 const router = express.Router()
 
-router.get('/', (req, res) => {
+const {isAuth} = require('../middlewares/auth.middleware')
+
+router.post('/', isAuth, (req, res) => {
     res.send('users')
 })
 

@@ -1,6 +1,5 @@
 require('dotenv').config()
 const express = require('express')
-const app = express()
 
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
@@ -8,6 +7,9 @@ const bodyParser = require('body-parser')
 const usersRouter = require('./routers/users.router')
 const booksRouter = require('./routers/books.router')
 const ordersRouter = require('./routers/orders.router')
+
+const app = express()
+const PORT = process.env.PORT || 8000
 
 mongoose.connect(process.env.DB_URL)
         .then(() => {
@@ -23,6 +25,4 @@ app.use('/users', usersRouter)
 app.use('/books', booksRouter)
 app.use('/orders', ordersRouter)
 
-
-const PORT = process.env.PORT || 8000
 app.listen(PORT, () => console.log('server started!'))
