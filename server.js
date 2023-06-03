@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require('express')
 
 const mongoose = require('mongoose')
-const bodyParser = require('body-parser')
 
 const usersRouter = require('./routers/users.router')
 const booksRouter = require('./routers/books.router')
@@ -19,7 +18,7 @@ mongoose.connect(process.env.DB_URL)
             console.log('failed to connect with database', err)
         })
 
-app.use(bodyParser.json())
+app.use(express.json())
 
 app.use('/users', usersRouter)
 app.use('/books', booksRouter)
