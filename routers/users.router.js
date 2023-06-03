@@ -8,7 +8,11 @@ router.route('/')
     .get(userController.getUsers)
     .post(userController.newUser)
 
-router.get('/:id', userController.getUser)
+router.route('/:id')
+    .get(userController.getUser)
+    .delete(userController.delUser)
+
+router.delete('/:id/delete-permanently', userController.delUserPermanently)
 
 router.post('/login', userController.login)
 

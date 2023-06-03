@@ -88,7 +88,42 @@ exports.newUser = async (req, res) => {
 }
 
 exports.delUser = async (req, res) => {
+    const id = req.params.id
+    let user = await userModel.findOne({_id: id})
 
+    if(user){
+        await userModel.updateOne({_id: id}, {deleted: true})
+            .then(() => {
+                res.status(200).json({
+                    data: {},
+                    status: 'OK'
+                })
+            })
+    }else{
+        res.status(404).json({
+            data: {},
+            status: 'ERROR',
+            errorMessage: 'user not found'
+        })
+    }
+}
+
+exports.delUserPermanently = async (req, res) => {
+    let id = req.params.id
+    await userModel.findByIdAndDelete(id)
+        .then(() => {
+            res.status(200).json({
+                data: {},
+                status: 'OK'
+            })
+        })
+        .catch(err => {
+            res.status(404).json({
+                data: {},
+                status: 'ERROR',
+                errorMessage: 'failed to delete user permanently'
+            })
+        })
 }
 
 exports.login = async (req, res) => {
