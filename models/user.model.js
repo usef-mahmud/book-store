@@ -24,9 +24,6 @@ const userSchema = mongoose.Schema({
     deleted: {
         type: Boolean,
         default: false
-    },
-    token: {
-        type: String
     }
 })
 

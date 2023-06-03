@@ -6,6 +6,7 @@ const userController = require('../controllers/user.controller')
 
 router.route('/')
     .get(userController.getUsers)
+    .post(userController.newUser)
 
 router.get('/:id', userController.getUser)
 
