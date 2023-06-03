@@ -55,7 +55,7 @@ exports.newUser = async (req, res) => {
             let hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt())
             const newUser = new userModel({
                 name: name,
-                email: password,
+                email: email,
                 password: hashedPassword,
                 age: age
             })
@@ -92,5 +92,37 @@ exports.delUser = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
+    const { email, password } = req.body
+    const matchUser = await userModel.findOne({email: email})
+    if(matchUser){
+        let compared = await bcrypt.compare(password, matchUser.password)
+        if(compared){
+            const token = jwt.sign(
+                { uid: matchUser._id },
+                process.env.SECRET_KEY,
+                { expiresIn: '30d' }
+            )
+            delete matchUser._doc.password
 
+            res.status(200).json({
+                data: {
+                    ...matchUser._doc,
+                    token: token
+                },
+                status: 'OK'
+            })
+        }else{
+            res.status(404).json({
+                data: {},
+                status: 'ERROR',
+                errorMessage: 'password is not correct'
+            })
+        }
+    }else{
+        res.status(404).json({
+            data: {},
+            status: 'ERROR',
+            errorMessage: 'there is no user with this email'
+        })
+    }
 }

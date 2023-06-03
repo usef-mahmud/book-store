@@ -10,4 +10,6 @@ router.route('/')
 
 router.get('/:id', userController.getUser)
 
+router.post('/login', userController.login)
+
 module.exports = router
