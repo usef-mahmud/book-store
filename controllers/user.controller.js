@@ -18,20 +18,20 @@ exports.getUsers = async (req, res) => {
 
 exports.getUser = async (req, res) => {
     let {id} = req.params
-    await userModel.findOne({_id: id})
-        .then(user => {
-            res.status(200).json({
-                data: user,
-                status: 'OK'
-            })
+    let user = await userModel.findOne({_id: id})
+
+    if(user){
+        res.status(200).json({
+            data: user,
+            status: 'OK'
         })
-        .catch(err => {
-            res.status(404).json({
-                data: {},
-                status: 'ERROR',
-                errorMessage: 'user not found'
-            })
+    }else{
+        res.status(404).json({
+            data: {},
+            status: 'ERROR',
+            errorMessage: 'user not found'
         })
+    }
 }
 
 exports.newUser = async (req, res) => {

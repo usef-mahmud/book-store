@@ -23,8 +23,8 @@ mongoose.connect(process.env.DB_URI)
 app.use(express.json())
 
 app.get('/', (req, res) => res.send('server is running'))
-app.use('/users', apiAuth, usersRouter)
-app.use('/books', apiAuth, booksRouter)
-app.use('/orders', apiAuth, ordersRouter)
+app.use('/users', usersRouter)
+app.use('/books', booksRouter)
+app.use('/orders', ordersRouter)
 
 app.listen(PORT, () => console.log('server started!'))
