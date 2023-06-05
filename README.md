@@ -10,7 +10,7 @@ if you intersted in the project and want to run on your machine, just clone it u
 git clone https://github.com/usef-mahmud/book-store.git
 ```
 
-and install dependencies with ```npm install```, you will also to create .env file with the following format:
+and install dependencies with ```npm install```, you will also need to create .env file with the following format:
 ```
 DB_URI= your_mongodb_URI
 SECRET_KEY= jwt_encryption_secret_key
