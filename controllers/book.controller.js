@@ -1,8 +1,14 @@
 const express = require('express')
+const {validationResult} = require('express-validator')
+
 const Book = require('../models/book.model')
 
 module.exports.getBooks = async (req, res) => {
     // pagination
+    let limit = req.query.limit,
+        currPage = req.query.page
+
+    
 }
 
 module.exports.getBook = async (req, res) => {
@@ -26,6 +32,28 @@ module.exports.getBook = async (req, res) => {
 
 module.exports.newBook = async (req, res) => {
     // multer book cover upload
+    const tempCoverUrl = 'https://downloads.hindawi.org/covers/svg/270x360/84935850.svg'
+    const {title, price, discount, description, author} = req.body
+
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        res.status(400).json({
+            data: {},
+            status: 'ERROR',
+            errorMessage: errors
+        })
+    }else{
+        res.status(200).json({
+            data: {
+                title,
+                price,
+                discount,
+                description,
+                author
+            },
+            status: 'OK'
+        })
+    }
 }
 
 module.exports.delBook = async (req, res) => {

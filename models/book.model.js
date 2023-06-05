@@ -10,8 +10,8 @@ const bookSchema = mongoose.Schema({
         type: Number
     },
     discount: {
-        required: true,
-        type: Number
+        type: Number,
+        default: 0
     },
     description: {
         required: true,
