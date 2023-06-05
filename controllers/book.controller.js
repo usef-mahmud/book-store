@@ -35,14 +35,8 @@ module.exports.newBook = async (req, res) => {
     const tempCoverUrl = 'https://downloads.hindawi.org/covers/svg/270x360/84935850.svg'
     const {title, price, discount, description, author} = req.body
 
-    const errors = validationResult(req)
-    if(!errors.isEmpty()){
-        res.status(400).json({
-            data: {},
-            status: 'ERROR',
-            errorMessage: errors
-        })
-    }else{
+    const validationErrors = validationResult(req)
+    if(validationErrors.isEmpty()){
         res.status(200).json({
             data: {
                 title,
@@ -52,6 +46,12 @@ module.exports.newBook = async (req, res) => {
                 author
             },
             status: 'OK'
+        })
+    }else{
+        res.status(400).json({
+            data: {},
+            status: 'ERROR',
+            errorMessage: validationErrors
         })
     }
 }

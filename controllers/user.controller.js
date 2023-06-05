@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
@@ -36,14 +37,9 @@ exports.getUser = async (req, res) => {
 
 exports.newUser = async (req, res) => {
     const { name, email, password, age } = req.body
+    const validationErrors = validationResult(req)
 
-    if(password.length < 8) {
-        res.status(404).json({
-            data: {},
-            status: 'ERROR',
-            errorMessages: 'password must be at least 8 characters'
-        })
-    }else{
+    if(validationErrors.isEmpty()){
         let match = await userModel.findOne({email: email})
         if(match){
             res.status(404).json({
@@ -59,7 +55,7 @@ exports.newUser = async (req, res) => {
                 password: hashedPassword,
                 age: age
             })
-
+    
             let userToken = jwt.sign(
                 { uid: newUser._id },
                 process.env.SECRET_KEY,
@@ -84,7 +80,16 @@ exports.newUser = async (req, res) => {
                 })
                     
         }
+    }else{
+        res.status(404).json({
+            data: {},
+            status: 'ERROR',
+            errorMessage: validationErrors
+        })
     }
+    
+    
+    
 }
 
 exports.delUser = async (req, res) => {

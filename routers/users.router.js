@@ -1,12 +1,13 @@
 const express = require('express')
 const router = express.Router()
 
-const {isAuth} = require('../middlewares/apiAuth.middleware')
+const {userValidator} = require('../middlewares/validators.middleware')
+
 const userController = require('../controllers/user.controller')
 
 router.route('/')
     .get(userController.getUsers)
-    .post(userController.newUser)
+    .post(userValidator(), userController.newUser)
 
 router.route('/:id')
     .get(userController.getUser)

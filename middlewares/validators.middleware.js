@@ -2,12 +2,18 @@ const {body} = require('express-validator')
 
 module.exports.userValidator = () => {
     return [
-        body('name').isEmpty(),
-        body('email').isEmail().isEmpty(),
-        body('password').isLength({
-            min: 8
-        }).isEmpty(),
-        body('age').isEmpty()
+        body('name')
+            .notEmpty().withMessage('name can not be empty'),
+        body('email')
+            .isEmail().withMessage('email format is not true')
+            .notEmpty().withMessage('email can not be empty'),
+        body('password')
+            .isLength({
+                min: 8
+            }).withMessage('password length should be at least 8 characters')
+            .notEmpty().withMessage('password can not be empty'),
+        body('age')
+            .notEmpty().withMessage('age can not be empty')
     ]
 }
 
