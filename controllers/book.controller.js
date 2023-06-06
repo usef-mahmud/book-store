@@ -8,7 +8,12 @@ module.exports.getBooks = async (req, res) => {
     let limit = req.query.limit,
         currPage = req.query.page
 
-    
+    const allBooks = await Book.find({})
+
+    res.status(200).json({
+        data: allBooks,
+        status: 'OK'
+    })
 }
 
 module.exports.getBook = async (req, res) => {
@@ -33,20 +38,41 @@ module.exports.getBook = async (req, res) => {
 module.exports.newBook = async (req, res) => {
     // multer book cover upload
     const tempCoverUrl = 'https://downloads.hindawi.org/covers/svg/270x360/84935850.svg'
-    const {title, price, discount, description, author} = req.body
+    const {title, price, discount, description, author, cover} = req.body
 
     const validationErrors = validationResult(req)
     if(validationErrors.isEmpty()){
-        res.status(200).json({
-            data: {
-                title,
-                price,
-                discount,
-                description,
-                author
-            },
-            status: 'OK'
+        const book = new Book({
+            title: title,
+            description: description,
+            price: price,
+            discount: discount,
+            author: author,
+            cover: cover
         })
+        
+        book
+            .save()
+            .then(() => {
+                res.status(200).json({
+                    data: {
+                        title,
+                        price,
+                        discount,
+                        cover: tempCoverUrl,
+                        description,
+                        author
+                    },
+                    status: 'OK'
+                })
+            })
+            .catch(err => {
+                res.status(400).json({
+                    data: {},
+                    status: 'ERROR',
+                    errorMessage: 'failed to add new book'
+                })
+            })
     }else{
         res.status(400).json({
             data: {},

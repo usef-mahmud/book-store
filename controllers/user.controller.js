@@ -2,10 +2,10 @@ const { validationResult } = require('express-validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-const userModel = require('../models/user.model')
+const User = require('../models/user.model')
 
 exports.getUsers = async (req, res) => {
-    await userModel.find({})
+    await User.find({})
         .then(users => res.status(200).json({
             data: users,
             status: 'OK'
@@ -19,7 +19,7 @@ exports.getUsers = async (req, res) => {
 
 exports.getUser = async (req, res) => {
     let {id} = req.params
-    let user = await userModel.findOne({_id: id})
+    let user = await User.findOne({_id: id})
 
     if(user){
         res.status(200).json({
@@ -40,7 +40,7 @@ exports.newUser = async (req, res) => {
     const validationErrors = validationResult(req)
 
     if(validationErrors.isEmpty()){
-        let match = await userModel.findOne({email: email})
+        let match = await User.findOne({email: email})
         if(match){
             res.status(404).json({
                 data: {},
@@ -49,7 +49,7 @@ exports.newUser = async (req, res) => {
             })
         }else{
             let hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt())
-            const newUser = new userModel({
+            const newUser = new User({
                 name: name,
                 email: email,
                 password: hashedPassword,
@@ -94,10 +94,10 @@ exports.newUser = async (req, res) => {
 
 exports.delUser = async (req, res) => {
     const id = req.params.id
-    let user = await userModel.findOne({_id: id})
+    let user = await User.findOne({_id: id})
 
     if(user){
-        await userModel.updateOne({_id: id}, {deleted: true})
+        await User.updateOne({_id: id}, {deleted: true})
             .then(() => {
                 res.status(200).json({
                     data: {},
@@ -115,7 +115,7 @@ exports.delUser = async (req, res) => {
 
 exports.delUserPermanently = async (req, res) => {
     let id = req.params.id
-    await userModel.findByIdAndDelete(id)
+    await User.findByIdAndDelete(id)
         .then(() => {
             res.status(200).json({
                 data: {},
@@ -133,7 +133,7 @@ exports.delUserPermanently = async (req, res) => {
 
 exports.login = async (req, res) => {
     const { email, password } = req.body
-    const matchUser = await userModel.findOne({email: email})
+    const matchUser = await User.findOne({email: email})
     if(matchUser){
         let compared = await bcrypt.compare(password, matchUser.password)
         if(compared){

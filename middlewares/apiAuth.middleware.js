@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
 module.exports.apiAuth = (req, res, next) => {
-  if (req.headers.authorization) {
+  if (req.headers['x-access-token']) {
     jwt.verify(
-      req.headers.authorization.split(" ")[1],
+      req.headers['x-access-token'],
       process.env.SECRET_KEY,
       (err) => {
         err

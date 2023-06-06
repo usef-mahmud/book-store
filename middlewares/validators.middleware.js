@@ -30,7 +30,10 @@ module.exports.bookValidator = () => {
             .notEmpty().withMessage('price can not be empty'),
         body('discount')
             .optional()
-            .isNumeric().withMessage('discount can not be empty'),
+            .isInt({
+                min: 0,
+                max: 100
+            }).withMessage('discount should be between 0% and 100%'),
         body('description')
             .isLength({
                 min: 10,
