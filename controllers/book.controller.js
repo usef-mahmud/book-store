@@ -8,32 +8,39 @@ module.exports.getBooks = async (req, res) => {
     let limit = parseInt(req.query.limit),
         currPage = parseInt(req.query.page)
 
-    const allBooks = await Book.find({})
+    const countBooks = await Book.countDocuments({})
+
+    
 
     if(limit && currPage){
+        const limitedBooks = await Book.find({}).skip((currPage-1)*limit).limit(limit)
+        
+
         res.status(200).json({
             data: {
-                books: allBooks.slice((currPage - 1)*limit, currPage * limit),
+                books: limitedBooks,
                 _metadata: {
-                    total: allBooks.length,
+                    total: countBooks,
                     current_page: currPage,
                     limit: limit,
                     paging: {
                         previous: currPage != 1 ? `/books?page=${currPage-1}&limit=${limit}` : null,
-                        next: Math.ceil(allBooks.length/limit) >= (currPage+1) ? `/books?page=${currPage+1}&limit=${limit}` : null,
+                        next: Math.ceil(countBooks/limit) >= (currPage+1) ? `/books?page=${currPage+1}&limit=${limit}` : null,
                         self: `/book?page=${currPage}&limit=${limit}`,
                         first: `/books?page=1&limit${limit}`,
-                        last: `/books?page=${Math.ceil(allBooks.length/limit)}&limit=${limit}`
+                        last: `/books?page=${Math.ceil(countBooks/limit)}&limit=${limit}`
                     }
                 }
             },
             status: 'OK'
         })
     }else{
+        const allBooks = await Book.find({})
+        
         res.status(200).json({
             data: {
                 books: allBooks,
-                total: allBooks.length,
+                total: countBooks,
             },
             status: 'OK'
         })
