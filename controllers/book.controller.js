@@ -10,12 +10,8 @@ module.exports.getBooks = async (req, res) => {
 
     const countBooks = await Book.countDocuments({})
 
-    
-
     if(limit && currPage){
-        const limitedBooks = await Book.find({}).skip((currPage-1)*limit).limit(limit)
-        
-
+        const limitedBooks = await Book.find({}, 'title price discount cover').skip((currPage-1)*limit).limit(limit)
         res.status(200).json({
             data: {
                 books: limitedBooks,
@@ -35,8 +31,7 @@ module.exports.getBooks = async (req, res) => {
             status: 'OK'
         })
     }else{
-        const allBooks = await Book.find({})
-        
+        const allBooks = await Book.find({}, 'title price discount cover')
         res.status(200).json({
             data: {
                 books: allBooks,
