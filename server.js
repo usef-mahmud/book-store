@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express')
+const cors = require('cors')
 
 const mongoose = require('mongoose')
 
@@ -21,6 +22,9 @@ mongoose.connect(process.env.DB_URI)
         })
 
 app.use(express.json())
+app.use(cors({
+    origin: process.env.FRONT_END
+}))
 
 app.get('/', (req, res) => res.send('server is running'))
 app.use('/users', usersRouter)
