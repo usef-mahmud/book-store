@@ -36,7 +36,7 @@ exports.getUser = async (req, res) => {
 }
 
 exports.register = async (req, res) => {
-    const { name, email, password, age } = req.body
+    const { name, email, password, age, keepLoggedIn } = req.body
     const validationErrors = validationResult(req)
 
     if(validationErrors.isEmpty()){
@@ -59,7 +59,9 @@ exports.register = async (req, res) => {
             let userToken = jwt.sign(
                 { uid: newUser._id },
                 process.env.SECRET_KEY,
-                { expiresIn: '30d' }
+                {
+                    expiresIn: keepLoggedIn ? '30d' : 1*24*60*60 // 1 day
+                }
             )
             newUser
                 .save()
