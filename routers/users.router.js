@@ -7,7 +7,7 @@ const userController = require('../controllers/user.controller')
 
 router.route('/')
     .get(userController.getUsers)
-    .post(userValidator(), userController.newUser)
+    .post(userValidator(), userController.register)
 
 router.route('/:id')
     .get(userController.getUser)

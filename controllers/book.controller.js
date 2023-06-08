@@ -8,9 +8,10 @@ module.exports.getBooks = async (req, res) => {
         currPage = parseInt(req.query.page)
 
     const countBooks = await Book.countDocuments({})
+    let projection = 'title price discount cover author'
 
     if(limit && currPage){
-        const limitedBooks = await Book.find({}, 'title price discount cover').skip((currPage-1)*limit).limit(limit)
+        const limitedBooks = await Book.find({}, projection).skip((currPage-1)*limit).limit(limit)
         res.status(200).json({
             data: {
                 books: limitedBooks,
@@ -30,7 +31,7 @@ module.exports.getBooks = async (req, res) => {
             status: 'OK'
         })
     }else{
-        const allBooks = await Book.find({}, 'title price discount cover')
+        const allBooks = await Book.find({}, projection)
         res.status(200).json({
             data: {
                 books: allBooks,
@@ -63,7 +64,7 @@ module.exports.getBook = async (req, res) => {
 module.exports.newBook = async (req, res) => {
     // multer book cover upload
     const tempCoverUrl = 'https://downloads.hindawi.org/covers/svg/270x360/84935850.svg'
-    const {title, price, discount, description, author, cover} = req.body
+    const {title, price, discount, description, author, cover, admin} = req.body
 
     const validationErrors = validationResult(req)
     if(validationErrors.isEmpty()){
@@ -73,7 +74,8 @@ module.exports.newBook = async (req, res) => {
             price: price,
             discount: discount,
             author: author,
-            cover: cover
+            cover: cover,
+            admin: admin
         })
         
         book
@@ -86,7 +88,8 @@ module.exports.newBook = async (req, res) => {
                         discount,
                         cover: tempCoverUrl,
                         description,
-                        author
+                        author,
+                        admin
                     },
                     status: 'OK'
                 })
@@ -124,4 +127,24 @@ module.exports.delBook = async (req, res) => {
                 errorMessage: 'failed to delete this book'
             })
         })
+}
+
+module.exports.editBook = async (req, res) => {
+    let edtiedData = req.body
+        id = req.params.id
+    
+    await Book.updateOne({_id: id}, edtiedData)
+            .then(book => {
+                res.status(200).json({
+                    data: {},
+                    status: 'OK'
+                })
+            })
+            .catch(err => {
+                res.status(500).json({
+                    data: {},
+                    status: 'ERROR',
+                    errorMessage: 'failed to update this book'
+                })
+            })
 }

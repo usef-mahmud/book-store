@@ -12,5 +12,6 @@ router.route('/')
 router.route('/:id')
     .get(bookController.getBook)
     .delete(bookController.delBook)
+    .put(bookController.editBook)
 
 module.exports = router

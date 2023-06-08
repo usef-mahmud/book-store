@@ -24,6 +24,15 @@ const bookSchema = mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    author: {
+        type: String,
+        required: true
+    },
+    admin: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 })
 

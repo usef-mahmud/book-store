@@ -1,17 +1,17 @@
 const mongoose = require('mongoose')
 
 const userSchema = mongoose.Schema({
-    time: {
+    createdAt: {
         type: Date,
         default: Date.now
     },
-    user: {
-        type: Schema.Types.ObjectId,
+    admin: {
+        type: mongoose.Types.ObjectId,
         ref: 'User',
         required: true
     },
     book: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: 'Book',
         required: true
     },
@@ -21,4 +21,4 @@ const userSchema = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('Order', userSchema)
