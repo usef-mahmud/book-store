@@ -5,13 +5,13 @@ const userSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    admin: {
+    user: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    book: {
-        type: mongoose.Types.ObjectId,
+    books: {
+        type: [mongoose.Types.ObjectId],
         ref: 'Book',
         required: true
     },

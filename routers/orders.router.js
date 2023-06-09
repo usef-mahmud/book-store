@@ -10,9 +10,9 @@ router.route('/')
 router.route('/:id')
     .get(orderController.getOrder)
 
-router.post(
+router.put(
         '/:id/delivered',
-        orderController.delivered
+        orderController.setDelivered
     )
 
 module.exports = router
