@@ -4,7 +4,7 @@ const router = express.Router()
 const orderController = require('../controllers/order.controller')
 
 router.route('/')
-    .get(orderController.getOrders)
+    .get(orderController.getAll)
     .post(orderController.newOrder)
 
 router.route('/:id')
@@ -16,8 +16,3 @@ router.put(
     )
 
 module.exports = router
-
-/**
- * TODO: send notifications middleware
- * FIXME: [x]
- */

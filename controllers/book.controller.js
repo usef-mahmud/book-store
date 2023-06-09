@@ -2,7 +2,7 @@ const {validationResult} = require('express-validator')
 
 const Book = require('../models/book.model')
 
-module.exports.getBooks = async (req, res) => {
+module.exports.getAll = async (req, res) => {
     // pagination
     let limit = parseInt(req.query.limit),
         currPage = parseInt(req.query.page)

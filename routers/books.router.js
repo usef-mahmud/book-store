@@ -6,7 +6,7 @@ const bookController = require('../controllers/book.controller')
 const {bookValidator} = require('../middlewares/validators.middleware')
 
 router.route('/')
-    .get(bookController.getBooks)
+    .get(bookController.getAll)
     .post(bookValidator(), bookController.newBook)
 
 router.route('/:id')

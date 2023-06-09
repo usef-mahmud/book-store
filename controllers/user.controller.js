@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 
 const User = require('../models/user.model')
 
-exports.getUsers = async (req, res) => {
+module.exports.getAll = async (req, res) => {
     await User.find({})
         .then(users => res.status(200).json({
             data: users,
@@ -17,7 +17,7 @@ exports.getUsers = async (req, res) => {
         }))
 }
 
-exports.getUser = async (req, res) => {
+module.exports.getUser = async (req, res) => {
     let {id} = req.params
     let user = await User.findOne({_id: id})
 
@@ -35,7 +35,7 @@ exports.getUser = async (req, res) => {
     }
 }
 
-exports.register = async (req, res) => {
+module.exports.register = async (req, res) => {
     const { name, email, password, age, keepLoggedIn } = req.body
     const validationErrors = validationResult(req)
 
@@ -94,7 +94,7 @@ exports.register = async (req, res) => {
     
 }
 
-exports.delUser = async (req, res) => {
+module.exports.delUser = async (req, res) => {
     const id = req.params.id
     let user = await User.findOne({_id: id})
 
@@ -115,7 +115,7 @@ exports.delUser = async (req, res) => {
     }
 }
 
-exports.delUserPermanently = async (req, res) => {
+module.exports.delUserPermanently = async (req, res) => {
     let id = req.params.id
     await User.findByIdAndDelete(id)
         .then(() => {
@@ -133,7 +133,7 @@ exports.delUserPermanently = async (req, res) => {
         })
 }
 
-exports.login = async (req, res) => {
+module.exports.login = async (req, res) => {
     const { email, password } = req.body
     const matchUser = await User.findOne({email: email})
     if(matchUser){

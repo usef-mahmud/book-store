@@ -1,7 +1,7 @@
 const Order = require('../models/order.model')
 const User = require('../models/user.model')
 
-module.exports.getOrders = async (req, res) => {
+module.exports.getAll = async (req, res) => {
     let is_delivered = (req.query.is_delivered === 'true')
     
     await Order.find(is_delivered ? {delivered: true} : {})
