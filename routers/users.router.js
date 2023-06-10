@@ -17,4 +17,6 @@ router.delete('/:id/delete-permanently', userController.delUserPermanently)
 
 router.post('/login', userController.login)
 
+router.get('/access', userController.checkLoggedIn)
+
 module.exports = router

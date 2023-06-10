@@ -168,3 +168,33 @@ module.exports.login = async (req, res) => {
         })
     }
 }
+
+module.exports.checkLoggedIn = async (req, res) => {
+    const token = req.headers.authorization.split(' ')[1]
+    if(!token){
+        res.status(200).json({
+            data: {},
+            status: 'ERROR',
+            errorMessage: 'token was not found'
+        })
+    }
+
+    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+        if(err){
+            res.status(200).json({
+                data: {
+                    loggedIn: false
+                },
+                status: 'OK'
+            })
+        }
+
+        res.status(200).json({
+            loggedIn: true,
+            data: {
+                userId: decoded.uid
+            },
+            status: 'OK'
+        })
+    })
+}
