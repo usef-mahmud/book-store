@@ -5,7 +5,7 @@ const notificationSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    user: {
+    to: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
         required: true

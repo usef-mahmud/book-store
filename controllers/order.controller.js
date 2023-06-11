@@ -38,7 +38,7 @@ module.exports.getOrder = async (req, res) => {
     }
 }
 
-module.exports.newOrder = async (req, res) => {
+module.exports.newOrder = async (req, res, next) => {
     // notification will be here
     let {user, books} = req.body 
 
@@ -56,23 +56,9 @@ module.exports.newOrder = async (req, res) => {
         books: books
     })
 
-    newOrder
-        .save()
-        .then(() => {
-            res.status(200).json({
-                data: {
-                    orderId: newOrder._id
-                },
-                status: 'OK'
-            })
-        })
-        .catch(() => {
-            res.status(500).json({
-                data: {},
-                status: 'ERROR',
-                errorMessage: 'failed to register new order'
-            })
-        })
+    req.newOrder = newOrder
+
+    next()
 }
 
 module.exports.setDelivered = async (req, res) => {
